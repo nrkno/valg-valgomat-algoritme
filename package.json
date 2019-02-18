@@ -1,0 +1,41 @@
+{
+  "name": "@nrk/valg-valgomat-algoritme",
+  "version": "1.0.0-rc.1",
+  "description": "Algoritmen for å beregne avstand mellom to svar på NRKs valgomat",
+  "main": "src/algoritme.js",
+  "scripts": {
+    "test": "tap src/algoritme.test.js",
+    "coverage": "tap src/algoritme.test.js --coverage-report=html"
+  },
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nrkno/valg-valgomat-algoritme.git"
+  },
+  "keywords": [
+    "nrk",
+    "valg",
+    "valgomat"
+  ],
+  "author": "DH",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/nrkno/valg-valgomat-algoritme/issues"
+  },
+  "homepage": "https://github.com/nrkno/valg-valgomat-algoritme#readme",
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "devDependencies": {
+    "jsverify": "0.8.4",
+    "tap": "^13.0.0-rc.9"
+  },
+  "dependencies": {},
+  "nyc": {
+    "exclude": [
+      "src/assets/*.js"
+    ]
+  }
+}
