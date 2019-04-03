@@ -57,7 +57,7 @@ function validateStatementAnswers(answer) {
   function validateStatementAnswer(statementId) {
     let currentStatement = answer[statementId];
 
-    if (POSSIBLE_ANSWERS.indexOf(currentStatement.value) < 0) {
+    if (POSSIBLE_ANSWERS.indexOf(parseInt(currentStatement.value, 10)) < 0) {
       throw new Error(
         formatStatementError(
           statementId,

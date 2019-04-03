@@ -1,6 +1,6 @@
 {
   "name": "@nrk/valg-valgomat-algoritme",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "description": "Algoritmen for å beregne avstand mellom to svar på NRKs valgomat",
   "main": "src/algoritme.js",
   "scripts": {
