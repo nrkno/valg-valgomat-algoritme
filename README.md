@@ -1,59 +1,69 @@
-# Valg Valgomat Algoritme
+# Valg Valgomat Algorithm
 
-> Regn ut avstanden mellom et parti og en valogmat-besvarelse.
+> Calculate the distance betwen two sets of positions.
 
-Regner ut avstanden mellom påstand-standpunktene til et parti og en valgomat-besvarelse.
+Calculates the distance between two sets of positions. Mostly used to calculate the distance between various party positions and a voter position.
 
 ## Usage
 
 ```js
-import { closeness } from "@nrk/valg-valgomat-algoritme";
+import { calculateDistance } from "@nrk/valg-valgomat-algoritme";
 
-let partiStandpunkt = {
+let partyPositions = {
   "1": { value: 1 },
   "2": { value: -1 }
 };
 
-let brukerSvar = {
+let voterPositions = {
   "1": { value: 0 },
   "2": { value: -2 }
 };
 
-let avstand = closeness(partiStandpunkt, brukerSvar); // => 0.75
+let distance = calculateDistance(partyPositions, voterPositions); // => 0.75
 ```
 
 ## API
 
 ```js
-import { closeness } from "@nrk/valg-valgomat-algoritme";
+import { calculateDistance } from "@nrk/valg-valgomat-algoritme";
 ```
 
-### let avstand = closeness(parti, bruker);
+### let distance = calculateDistance(positionsA, positionsB);
 
-Tar inn to sett med svar, et fra et parti og et fra en bruker.
+Accepts two sets of positions and returns the distance between them.
 
-Begge svarene er på samme form:
-```js
+Positions are given in the form of sets:
+
+```ts
 {
-  [statementId: String]: { value: -2 | -1 | 0 | 1 | 2 }
+  [statement: string]: { value: number }
 }
 ```
 
-Parti-svaret vil bli validert etter følgende regler:
-- Kan ikke ha svar `0` for noen påstander
-- Må ha svar `-2 | -1 | 1 | 2` for alle påstander
+Where `value` is in the interval `[-2.0, 2.0]`
 
-Bruker-svaret vil bli validert etter følgende regler:
-- Må ha svar `-2 | -1 | 0 | 1 | 2` for alle påstander
-- Kan ikke ha svar på en påstand som partiet ikke har besvart
-
-Output vil være et tall mellom `0` og `1` som sier noe om hvor nære de to svarene er i henhold til algoritmen.
+Output will be a number in the interval `[0.0, 1.0]` where `0.0` is the largest possible distance and `1.0` is the smallest possible distance (iow. identical).
 
 ## Installation
 
 ```sh
 npm install @nrk/valg-valgomat-algoritme
 ```
+
+## Glossary
+
+- Position = Standpunkt
+- Statement = Påstand
+- Party = Parti
+- Voter = Velger
+
+## A note on codestyle
+
+This module uses default configuration of Prettier.
+
+This module uses CommonJS/Node-style `require` for broadest possible ecosystem-compatbility without additional compile-steps.
+
+This module uses a fairly modern flavor of JavaScript and will require compilation if it is to be used with older runtimes.
 
 ## See also
 

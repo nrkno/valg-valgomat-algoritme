@@ -1,11 +1,12 @@
 {
   "name": "@nrk/valg-valgomat-algoritme",
-  "version": "1.0.0-rc.2",
-  "description": "Algoritmen for å beregne avstand mellom to svar på NRKs valgomat",
-  "main": "src/algoritme.js",
+  "version": "1.0.0-rc.3",
+  "description": "The algorithm used to calculate distance between sets of positions for NRKs Valgomat",
+  "main": "src/algorithm.js",
   "scripts": {
-    "test": "tap src/algoritme.test.js",
-    "coverage": "tap src/algoritme.test.js --coverage-report=html"
+    "test": "tap src/algorithm.test.js -Rdot",
+    "coverage": "tap src/algorithm.test.js --coverage-report=html",
+    "lint": "eslint src/"
   },
   "files": [
     "src"
@@ -29,8 +30,10 @@
     "access": "restricted"
   },
   "devDependencies": {
+    "eslint": "^5.16.0",
     "jsverify": "0.8.4",
-    "tap": "^13.0.0-rc.9"
+    "prettier": "^1.17.0",
+    "tap": "^13.1.2"
   },
   "dependencies": {},
   "nyc": {
