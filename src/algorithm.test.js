@@ -3,6 +3,11 @@ const jsc = require("jsverify");
 
 const { calculateResult: algorithm2017 } = require("./assets/algorithm2017.js");
 const { distance: algorithm } = require("./algorithm.js");
+const { toPositions } = require("./domain/positions.js");
+const {
+  positions: positionsMock,
+  position: positionMock
+} = require("./__helpers/mocks.js");
 
 function runAlgoritme2017({ party, voter }) {
   function mapToOldAnswer(positions, statementId) {
@@ -44,37 +49,13 @@ function runAlgoritme2017({ party, voter }) {
   return closeness.scorePercent;
 }
 
-function randomValue() {
-  return (Math.random() > 0.5 ? 1 : -1) * Math.floor(1 + 2 * Math.random());
-}
-
-function positionsMock({ n, valueGenerator = randomValue }) {
-  return vectorToPositions(
-    Array(n)
-      .fill(1)
-      .map((_, i) => [i, valueGenerator()])
-  );
-}
-
-function vectorToPositions(vector) {
-  return vector.reduce((positions, [id, value]) => {
-    positions[id] = { value };
-    return positions;
-  }, {});
-}
-
-function arrayToVector(arr) {
-  return arr.map((v, i) => [i, v]);
-}
-
-function withArrToPositions(check) {
+function arrayToPositionsHelper(check) {
   // The order of keys is not really interesing here,
   // but needed for the algorithm to do its thing.
   return function([arr1, arr2]) {
-    return check([
-      vectorToPositions(arrayToVector(arr1)),
-      vectorToPositions(arrayToVector(arr2))
-    ]);
+    let vector1 = arr1.map((v, i) => [i, v]);
+    let vector2 = arr2.map((v, i) => [i, v]);
+    return check([toPositions(vector1), toPositions(vector2)]);
   };
 }
 
@@ -84,6 +65,8 @@ let arbitraryPositions = jsc.array(jsc.number(-2, 2));
 let arbitraryPositionsWithoutZeroes = jsc.array(
   jsc.oneof(jsc.integer(-2, -1), jsc.integer(1, 2))
 );
+
+let arbitraryPositionsOnlyZeroes = jsc.array(jsc.constant(0));
 
 // Property based tests
 
@@ -104,7 +87,9 @@ tap.test("identical to 2017 algorithm", function(t) {
     return distance === distanceOld;
   }
 
-  jsc.assert(jsc.forall(arbitraryPositionsPair, withArrToPositions(check)));
+  let wrappedCheck = arrayToPositionsHelper(check);
+
+  jsc.assert(jsc.forall(arbitraryPositionsPair, wrappedCheck));
   t.end();
 });
 
@@ -121,7 +106,27 @@ tap.test("algorithm is symmetrical", function(t) {
     return distanceA === distanceB;
   }
 
-  jsc.assert(jsc.forall(arbitraryPositionsPair, withArrToPositions(check)));
+  let wrappedCheck = arrayToPositionsHelper(check);
+
+  jsc.assert(jsc.forall(arbitraryPositionsPair, wrappedCheck));
+  t.end();
+});
+
+tap.test("not answered and missing are identical", function(t) {
+  let arbitraryPositionsPair = jsc.pair(
+    arbitraryPositionsOnlyZeroes,
+    jsc.constant([])
+  );
+
+  function check([a, b]) {
+    let distance = algorithm(a, b);
+
+    return distance === 0;
+  }
+
+  let wrappedCheck = arrayToPositionsHelper(check);
+
+  jsc.assert(jsc.forall(arbitraryPositionsPair, wrappedCheck));
   t.end();
 });
 
@@ -138,7 +143,9 @@ tap.test("handles identical set of answered statements", function(t) {
     return distance <= 1 && distance >= 0;
   }
 
-  jsc.assert(jsc.forall(arbitraryPositionsPair, withArrToPositions(check)));
+  let wrappedCheck = arrayToPositionsHelper(check);
+
+  jsc.assert(jsc.forall(arbitraryPositionsPair, wrappedCheck));
   t.end();
 });
 
@@ -155,7 +162,9 @@ tap.test("handles uneven number of answered statements", function(t) {
     return distance <= 1 && distance >= 0;
   }
 
-  jsc.assert(jsc.forall(arbitraryPositionsPair, withArrToPositions(check)));
+  let wrappedCheck = arrayToPositionsHelper(check);
+
+  jsc.assert(jsc.forall(arbitraryPositionsPair, wrappedCheck));
   t.end();
 });
 
@@ -168,22 +177,23 @@ tap.test("both empty", function(t) {
 });
 
 tap.test("left-empty", function(t) {
-  let closeness = algorithm(positionsMock({ n: 1 }), []);
+  let closeness = algorithm(positionsMock({ n: 2 }), []);
 
   t.ok(closeness === 0);
   t.end();
 });
 
 tap.test("right-empty", function(t) {
-  let closeness = algorithm([], positionsMock({ n: 1 }));
+  let closeness = algorithm([], positionsMock({ n: 2 }));
 
   t.ok(closeness === 0);
   t.end();
 });
 
 tap.test("left just-0s", function(t) {
-  let a = vectorToPositions([[0, 0], [1, 0]]);
-  let b = positionsMock({ n: 2 });
+  let n = 2;
+  let a = positionsMock({ n, positionMock: () => 0 });
+  let b = positionsMock({ n });
   let distance = algorithm(a, b);
 
   t.ok(distance === 0);
@@ -191,8 +201,9 @@ tap.test("left just-0s", function(t) {
 });
 
 tap.test("right just-0s", function(t) {
-  let a = positionsMock({ n: 2 });
-  let b = vectorToPositions([[0, 0], [1, 0]]);
+  let n = 2;
+  let a = positionsMock({ n });
+  let b = positionsMock({ n, positionMock: () => 0 });
   let distance = algorithm(a, b);
 
   t.ok(distance === 0);
@@ -200,35 +211,63 @@ tap.test("right just-0s", function(t) {
 });
 
 tap.test("both just-0s", function(t) {
-  let a = vectorToPositions([[2, 0], [3, 0]]);
-  let b = vectorToPositions([[0, 0], [1, 0]]);
+  let n = 2;
+  let a = positionsMock({ n, positionMock: () => 0 });
+  let b = positionsMock({ n, positionMock: () => 0 });
   let distance = algorithm(a, b);
 
   t.ok(distance === 0);
   t.end();
 });
 
-tap.test("left un-even", function(t) {
-  let a = vectorToPositions([[0, -2], [1, 1], [2, 2]]);
-  let b = vectorToPositions([[0, 1], [1, 1]]);
+tap.test("left not answered", function(t) {
+  let a = toPositions([[0, -2], [1, 1], [2, 2]]);
+  let b = toPositions([[0, 1], [1, 1], [2, 0]]);
   let distance = algorithm(a, b);
 
   t.ok(distance === (8 - 3) / 8);
   t.end();
 });
 
-tap.test("right un-even", function(t) {
-  let a = vectorToPositions([[0, 1], [1, 1]]);
-  let b = vectorToPositions([[0, -2], [1, 1], [2, 2]]);
+tap.test("left missing", function(t) {
+  let a = toPositions([[0, -2], [1, 1], [2, 2]]);
+  let b = toPositions([[0, 1], [1, 1]]);
   let distance = algorithm(a, b);
 
   t.ok(distance === (8 - 3) / 8);
   t.end();
 });
 
-tap.test("both un-even", function(t) {
-  let a = vectorToPositions([[-1, -1], [0, 1], [1, 1]]);
-  let b = vectorToPositions([[0, -2], [1, 1], [2, 2]]);
+tap.test("right not answered", function(t) {
+  let a = toPositions([[0, 1], [1, 1], [2, 0]]);
+  let b = toPositions([[0, -2], [1, 1], [2, 2]]);
+  let distance = algorithm(a, b);
+
+  t.ok(distance === (8 - 3) / 8);
+  t.end();
+});
+
+tap.test("right missing", function(t) {
+  let a = toPositions([[0, 1], [1, 1]]);
+  let b = toPositions([[0, -2], [1, 1], [2, 2]]);
+  let distance = algorithm(a, b);
+
+  t.ok(distance === (8 - 3) / 8);
+  t.end();
+});
+
+tap.test("both not answered", function(t) {
+  let a = toPositions([[0, 1], [1, 1], [2, 0], [3, -1]]);
+  let b = toPositions([[0, -2], [1, 1], [2, 2], [3, 0]]);
+  let distance = algorithm(a, b);
+
+  t.ok(distance === (8 - 3) / 8);
+  t.end();
+});
+
+tap.test("both missing", function(t) {
+  let a = toPositions([[0, 1], [1, 1], [3, -1]]);
+  let b = toPositions([[0, -2], [1, 1], [2, 2]]);
   let distance = algorithm(a, b);
 
   t.ok(distance === (8 - 3) / 8);
@@ -254,24 +293,24 @@ tap.test("symmetrical with example left-block", function(t) {
     ["442", 0.25]
   ];
   let voter = [
-    ["3", randomValue()],
-    ["8", randomValue()],
-    ["16", randomValue()],
-    ["23", randomValue()],
-    ["38", randomValue()],
-    ["42", randomValue()],
-    ["63", randomValue()],
-    ["64", randomValue()],
-    ["71", randomValue()],
-    ["142", randomValue()],
-    ["222", randomValue()],
-    ["391", randomValue()],
-    ["411", randomValue()],
-    ["432", randomValue()],
-    ["442", randomValue()]
+    ["3", positionMock()],
+    ["8", positionMock()],
+    ["16", positionMock()],
+    ["23", positionMock()],
+    ["38", positionMock()],
+    ["42", positionMock()],
+    ["63", positionMock()],
+    ["64", positionMock()],
+    ["71", positionMock()],
+    ["142", positionMock()],
+    ["222", positionMock()],
+    ["391", positionMock()],
+    ["411", positionMock()],
+    ["432", positionMock()],
+    ["442", positionMock()]
   ];
-  let a = vectorToPositions(left);
-  let b = vectorToPositions(voter);
+  let a = toPositions(left);
+  let b = toPositions(voter);
 
   let distanceA = algorithm(a, b);
   let distanceB = algorithm(b, a);
@@ -299,24 +338,24 @@ tap.test("symmetrical with example centre-block", function(t) {
     ["442", 0.66]
   ];
   let voter = [
-    ["3", randomValue()],
-    ["8", randomValue()],
-    ["16", randomValue()],
-    ["23", randomValue()],
-    ["38", randomValue()],
-    ["42", randomValue()],
-    ["63", randomValue()],
-    ["64", randomValue()],
-    ["71", randomValue()],
-    ["142", randomValue()],
-    ["222", randomValue()],
-    ["391", randomValue()],
-    ["411", randomValue()],
-    ["432", randomValue()],
-    ["442", randomValue()]
+    ["3", positionMock()],
+    ["8", positionMock()],
+    ["16", positionMock()],
+    ["23", positionMock()],
+    ["38", positionMock()],
+    ["42", positionMock()],
+    ["63", positionMock()],
+    ["64", positionMock()],
+    ["71", positionMock()],
+    ["142", positionMock()],
+    ["222", positionMock()],
+    ["391", positionMock()],
+    ["411", positionMock()],
+    ["432", positionMock()],
+    ["442", positionMock()]
   ];
-  let a = vectorToPositions(centre);
-  let b = vectorToPositions(voter);
+  let a = toPositions(centre);
+  let b = toPositions(voter);
 
   let distanceA = algorithm(a, b);
   let distanceB = algorithm(b, a);
@@ -344,24 +383,24 @@ tap.test("symmetrical with example right-block", function(t) {
     ["442", -1]
   ];
   let voter = [
-    ["3", randomValue()],
-    ["8", randomValue()],
-    ["16", randomValue()],
-    ["23", randomValue()],
-    ["38", randomValue()],
-    ["42", randomValue()],
-    ["63", randomValue()],
-    ["64", randomValue()],
-    ["71", randomValue()],
-    ["142", randomValue()],
-    ["222", randomValue()],
-    ["391", randomValue()],
-    ["411", randomValue()],
-    ["432", randomValue()],
-    ["442", randomValue()]
+    ["3", positionMock()],
+    ["8", positionMock()],
+    ["16", positionMock()],
+    ["23", positionMock()],
+    ["38", positionMock()],
+    ["42", positionMock()],
+    ["63", positionMock()],
+    ["64", positionMock()],
+    ["71", positionMock()],
+    ["142", positionMock()],
+    ["222", positionMock()],
+    ["391", positionMock()],
+    ["411", positionMock()],
+    ["432", positionMock()],
+    ["442", positionMock()]
   ];
-  let a = vectorToPositions(right);
-  let b = vectorToPositions(voter);
+  let a = toPositions(right);
+  let b = toPositions(voter);
 
   let distanceA = algorithm(a, b);
   let distanceB = algorithm(b, a);
@@ -371,8 +410,8 @@ tap.test("symmetrical with example right-block", function(t) {
 });
 
 tap.test("readme example", function(t) {
-  let a = vectorToPositions([[0, 1], [1, -1]]);
-  let b = vectorToPositions([[0, 0], [1, -2]]);
+  let a = toPositions([[0, 1], [1, -1]]);
+  let b = toPositions([[0, 0], [1, -2]]);
   let distance = algorithm(a, b);
 
   t.ok(distance === 0.75);

@@ -1,59 +1,36 @@
-const MAX_DIST = 2.0 - -2.0;
+const {
+  toVector,
+  removeNotAnswered,
+  toStatementSet,
+  commonStatements
+} = require("./domain/positions.js");
 
-function pipe(...fns) {
-  return function(x) {
-    return fns.reduce((v, f) => f(v), x);
-  };
-}
+const { pipe } = require("./domain/functions.js");
 
-function zipByIds(ids, vectorA, vectorB) {
-  return ids.map(function(id) {
-    let a = vectorA.find(([statementId]) => statementId === id);
-    let b = vectorB.find(([statementId]) => statementId === id);
+const MIN_POSITION = -2;
+const MAX_POSITION = 2;
+const MAX_DIST = Math.abs(MAX_POSITION - MIN_POSITION);
 
-    return [a[1], b[1]];
+function combineBy(statements, positionsA, positionsB) {
+  return statements.map(function(statementId) {
+    let a = positionsA[statementId];
+    let b = positionsB[statementId];
+
+    return [a.value, b.value];
   });
-}
-
-function difference([a, b]) {
-  return Math.abs(a - b);
-}
-
-function sum(s, v) {
-  return s + v;
-}
-
-function filterNotAnswered(vector) {
-  return vector.filter(function([, position]) {
-    return position !== 0;
-  });
-}
-
-function set(vector) {
-  return vector.map(([id]) => id);
-}
-
-function union(setA, setB) {
-  return setA.filter(id => setB.includes(id));
-}
-
-function positionsToVector(positions) {
-  return Object.keys(positions).map(statementId => [
-    statementId,
-    parseFloat(positions[statementId].value)
-  ]);
 }
 
 function distance(positionsA, positionsB) {
   let processPositions = pipe(
-    positionsToVector,
-    filterNotAnswered
+    toVector,
+    removeNotAnswered,
+    toStatementSet
   );
 
-  let vectorA = processPositions(positionsA);
-  let vectorB = processPositions(positionsB);
+  let statementsA = processPositions(positionsA);
+  let statementsB = processPositions(positionsB);
 
-  let answeredStatements = union(set(vectorA), set(vectorB));
+  let answeredStatements = commonStatements(statementsA, statementsB);
 
   if (answeredStatements.length === 0) {
     // NOTE:
@@ -64,9 +41,9 @@ function distance(positionsA, positionsB) {
     return 0;
   }
 
-  let distance = zipByIds(answeredStatements, vectorA, vectorB)
-    .map(difference)
-    .reduce(sum);
+  let distance = combineBy(answeredStatements, positionsA, positionsB)
+    .map(([a, b]) => Math.abs(a - b))
+    .reduce((sum, value) => sum + value);
 
   let maxPossibleDistance = answeredStatements.length * MAX_DIST;
 
