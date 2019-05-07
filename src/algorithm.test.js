@@ -80,7 +80,7 @@ function withArrToPositions(check) {
 
 let arbitraryPositions = jsc.array(jsc.number(-2, 2));
 
-// Parties are not allowed to have position 0 on any statement
+// Arbitrary set of positions without skips
 let arbitraryPositionsWithoutZeroes = jsc.array(
   jsc.oneof(jsc.integer(-2, -1), jsc.integer(1, 2))
 );
@@ -367,5 +367,14 @@ tap.test("symmetrical with example right-block", function(t) {
   let distanceB = algorithm(b, a);
 
   t.ok(distanceA === distanceB);
+  t.end();
+});
+
+tap.test("readme example", function(t) {
+  let a = vectorToPositions([[0, 1], [1, -1]]);
+  let b = vectorToPositions([[0, 0], [1, -2]]);
+  let distance = algorithm(a, b);
+
+  t.ok(distance === 0.75);
   t.end();
 });
