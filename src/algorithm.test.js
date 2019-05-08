@@ -2,7 +2,7 @@ const tap = require("tap");
 const jsc = require("jsverify");
 
 const { calculateResult: algorithm2017 } = require("./assets/algorithm2017.js");
-const { distance } = require("./algorithm.js");
+const { distance, distanceMap } = require("./algorithm.js");
 const { toPositions } = require("./domain/positions.js");
 const {
   positions: positionsMock,
@@ -406,5 +406,37 @@ tap.test("readme example", function(t) {
   let b = toPositions([[0, 0], [1, -2]]);
 
   t.ok(distance(a, b) === 0.75);
+  t.end();
+});
+
+tap.test("distanceMap", function(t) {
+  tap.test("result includes all ids passed", function(t) {
+    let map = {
+      1: toPositions([[0, 1], [1, -1]]),
+      2: toPositions([[0, 2], [1, -2]])
+    };
+
+    let a = toPositions([[0, 1], [1, -2]]);
+
+    let distances = distanceMap(a, map);
+
+    t.same(Object.keys(map), Object.keys(distances));
+    t.end();
+  });
+
+  tap.test("result include actual distances", function(t) {
+    let b1 = toPositions([[0, 1], [1, -1]]);
+    let b2 = toPositions([[0, 2], [1, -2]]);
+    let map = { 1: b1, 2: b2 };
+
+    let a = toPositions([[0, 1], [1, -2]]);
+
+    let distances = distanceMap(a, map);
+
+    t.ok(distances[1] === distance(a, b1));
+    t.ok(distances[2] === distance(a, b2));
+    t.end();
+  });
+
   t.end();
 });

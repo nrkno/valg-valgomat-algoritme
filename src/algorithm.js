@@ -50,6 +50,17 @@ function distance(positionsA, positionsB) {
   return (maxPossibleDistance - distance) / maxPossibleDistance;
 }
 
+function distanceMap(positionsA, positionsMap) {
+  let result = {};
+  for (let id in positionsMap) {
+    let positionsB = positionsMap[id];
+    result[id] = distance(positionsA, positionsB);
+  }
+
+  return result;
+}
+
 module.exports = {
-  distance
+  distance,
+  distanceMap
 };

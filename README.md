@@ -6,6 +6,8 @@ Calculates the distance between two sets of positions. Mostly used to calculate 
 
 ## Usage
 
+The simple case is comparing to sets of positions.
+
 ```js
 import { distance } from "@nrk/valg-valgomat-algoritme";
 
@@ -20,6 +22,34 @@ let voterPositions = {
 };
 
 let d = distance(partyPositions, voterPositions); // => 0.75
+```
+
+The module also comes with a function to compare many positions to one position.
+
+```js
+import { distanceMap } from "@nrk/valg-valgomat-algoritme";
+
+let partyAPositions = {
+  "1": { value: 1 },
+  "2": { value: -1 }
+};
+
+let partyBPositions = {
+  "1": { value: 2 },
+  "2": { value: -2 }
+};
+
+let partyPostitions = {
+  partyA: partyAPositions,
+  partyB: partyBPositions
+};
+
+let voterPositions = {
+  "1": { value: 0 },
+  "2": { value: -2 }
+};
+
+let distances = distanceMap(voterPositions, partyPositions); // => { "partyA": 0.75, "partyB": 1.0 }
 ```
 
 ### Validation
@@ -68,7 +98,7 @@ if (maybeNotOverlapping) {
 ## API
 
 ```js
-import { distance } from "@nrk/valg-valgomat-algoritme";
+import { distance, distanceMap } from "@nrk/valg-valgomat-algoritme";
 ```
 
 ### let d = distance(positionsA, positionsB);
@@ -86,6 +116,14 @@ Positions are given in the form of sets:
 Where `value` is in the interval `[-2.0, 2.0]`
 
 Output will be a number in the interval `[0.0, 1.0]` where `0.0` is the largest possible distance and `1.0` is the smallest possible distance (iow. identical).
+
+### let distances = distanceMap(positionsA, positionsMap);
+
+Accepts a set of positions and a map of many sets of positions and returns a map of the distances between a position in the position map and the first position.
+
+This is useful if you want to calculate the distance between one set of positions and many sets of positions. For instance between all parties and a single voter.
+
+Output will be a map from the keys in the positionsMap and the distance to the given position.
 
 ### Validation
 
