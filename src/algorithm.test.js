@@ -2,7 +2,7 @@ const tap = require("tap");
 const jsc = require("jsverify");
 
 const { calculateResult: algorithm2017 } = require("./assets/algorithm2017.js");
-const { distance: algorithm } = require("./algorithm.js");
+const { distance } = require("./algorithm.js");
 const { toPositions } = require("./domain/positions.js");
 const {
   positions: positionsMock,
@@ -81,10 +81,10 @@ tap.test("identical to 2017 algorithm", function(t) {
   );
 
   function check([a, b]) {
-    let distance = algorithm(a, b);
-    let distanceOld = runAlgoritme2017({ party: a, voter: b });
+    let d = distance(a, b);
+    let dOld = runAlgoritme2017({ party: a, voter: b });
 
-    return distance === distanceOld;
+    return d === dOld;
   }
 
   let wrappedCheck = arrayToPositionsHelper(check);
@@ -100,8 +100,8 @@ tap.test("algorithm is symmetrical", function(t) {
   );
 
   function check([a, b]) {
-    let distanceA = algorithm(a, b);
-    let distanceB = algorithm(b, a);
+    let distanceA = distance(a, b);
+    let distanceB = distance(b, a);
 
     return distanceA === distanceB;
   }
@@ -119,9 +119,7 @@ tap.test("not answered and missing are identical", function(t) {
   );
 
   function check([a, b]) {
-    let distance = algorithm(a, b);
-
-    return distance === 0;
+    return distance(a, b) === 0;
   }
 
   let wrappedCheck = arrayToPositionsHelper(check);
@@ -138,9 +136,9 @@ tap.test("handles identical set of answered statements", function(t) {
   );
 
   function check([a, b]) {
-    let distance = algorithm(a, b);
+    let d = distance(a, b);
 
-    return distance <= 1 && distance >= 0;
+    return d <= 1 && d >= 0;
   }
 
   let wrappedCheck = arrayToPositionsHelper(check);
@@ -157,9 +155,9 @@ tap.test("handles uneven number of answered statements", function(t) {
   );
 
   function check([a, b]) {
-    let distance = algorithm(a, b);
+    let d = distance(a, b);
 
-    return distance <= 1 && distance >= 0;
+    return d <= 1 && d >= 0;
   }
 
   let wrappedCheck = arrayToPositionsHelper(check);
@@ -170,23 +168,26 @@ tap.test("handles uneven number of answered statements", function(t) {
 
 // Example based tests
 tap.test("both empty", function(t) {
-  let closeness = algorithm([], []);
+  let a = {};
+  let b = {};
 
-  t.ok(closeness === 0);
+  t.ok(distance(a, b) === 0);
   t.end();
 });
 
 tap.test("left-empty", function(t) {
-  let closeness = algorithm(positionsMock({ n: 2 }), []);
+  let a = positionsMock({ n: 2 });
+  let b = {};
 
-  t.ok(closeness === 0);
+  t.ok(distance(a, b) === 0);
   t.end();
 });
 
 tap.test("right-empty", function(t) {
-  let closeness = algorithm([], positionsMock({ n: 2 }));
+  let a = {};
+  let b = positionsMock({ n: 2 });
 
-  t.ok(closeness === 0);
+  t.ok(distance(a, b) === 0);
   t.end();
 });
 
@@ -194,9 +195,8 @@ tap.test("left just-0s", function(t) {
   let n = 2;
   let a = positionsMock({ n, positionMock: () => 0 });
   let b = positionsMock({ n });
-  let distance = algorithm(a, b);
 
-  t.ok(distance === 0);
+  t.ok(distance(a, b) === 0);
   t.end();
 });
 
@@ -204,9 +204,8 @@ tap.test("right just-0s", function(t) {
   let n = 2;
   let a = positionsMock({ n });
   let b = positionsMock({ n, positionMock: () => 0 });
-  let distance = algorithm(a, b);
 
-  t.ok(distance === 0);
+  t.ok(distance(a, b) === 0);
   t.end();
 });
 
@@ -214,63 +213,56 @@ tap.test("both just-0s", function(t) {
   let n = 2;
   let a = positionsMock({ n, positionMock: () => 0 });
   let b = positionsMock({ n, positionMock: () => 0 });
-  let distance = algorithm(a, b);
 
-  t.ok(distance === 0);
+  t.ok(distance(a, b) === 0);
   t.end();
 });
 
 tap.test("left not answered", function(t) {
   let a = toPositions([[0, -2], [1, 1], [2, 2]]);
   let b = toPositions([[0, 1], [1, 1], [2, 0]]);
-  let distance = algorithm(a, b);
 
-  t.ok(distance === (8 - 3) / 8);
+  t.ok(distance(a, b) === (8 - 3) / 8);
   t.end();
 });
 
 tap.test("left missing", function(t) {
   let a = toPositions([[0, -2], [1, 1], [2, 2]]);
   let b = toPositions([[0, 1], [1, 1]]);
-  let distance = algorithm(a, b);
 
-  t.ok(distance === (8 - 3) / 8);
+  t.ok(distance(a, b) === (8 - 3) / 8);
   t.end();
 });
 
 tap.test("right not answered", function(t) {
   let a = toPositions([[0, 1], [1, 1], [2, 0]]);
   let b = toPositions([[0, -2], [1, 1], [2, 2]]);
-  let distance = algorithm(a, b);
 
-  t.ok(distance === (8 - 3) / 8);
+  t.ok(distance(a, b) === (8 - 3) / 8);
   t.end();
 });
 
 tap.test("right missing", function(t) {
   let a = toPositions([[0, 1], [1, 1]]);
   let b = toPositions([[0, -2], [1, 1], [2, 2]]);
-  let distance = algorithm(a, b);
 
-  t.ok(distance === (8 - 3) / 8);
+  t.ok(distance(a, b) === (8 - 3) / 8);
   t.end();
 });
 
 tap.test("both not answered", function(t) {
   let a = toPositions([[0, 1], [1, 1], [2, 0], [3, -1]]);
   let b = toPositions([[0, -2], [1, 1], [2, 2], [3, 0]]);
-  let distance = algorithm(a, b);
 
-  t.ok(distance === (8 - 3) / 8);
+  t.ok(distance(a, b) === (8 - 3) / 8);
   t.end();
 });
 
 tap.test("both missing", function(t) {
   let a = toPositions([[0, 1], [1, 1], [3, -1]]);
   let b = toPositions([[0, -2], [1, 1], [2, 2]]);
-  let distance = algorithm(a, b);
 
-  t.ok(distance === (8 - 3) / 8);
+  t.ok(distance(a, b) === (8 - 3) / 8);
   t.end();
 });
 
@@ -312,8 +304,8 @@ tap.test("symmetrical with example left-block", function(t) {
   let a = toPositions(left);
   let b = toPositions(voter);
 
-  let distanceA = algorithm(a, b);
-  let distanceB = algorithm(b, a);
+  let distanceA = distance(a, b);
+  let distanceB = distance(b, a);
 
   t.ok(distanceA === distanceB);
   t.end();
@@ -357,8 +349,8 @@ tap.test("symmetrical with example centre-block", function(t) {
   let a = toPositions(centre);
   let b = toPositions(voter);
 
-  let distanceA = algorithm(a, b);
-  let distanceB = algorithm(b, a);
+  let distanceA = distance(a, b);
+  let distanceB = distance(b, a);
 
   t.ok(distanceA === distanceB);
   t.end();
@@ -402,8 +394,8 @@ tap.test("symmetrical with example right-block", function(t) {
   let a = toPositions(right);
   let b = toPositions(voter);
 
-  let distanceA = algorithm(a, b);
-  let distanceB = algorithm(b, a);
+  let distanceA = distance(a, b);
+  let distanceB = distance(b, a);
 
   t.ok(distanceA === distanceB);
   t.end();
@@ -412,8 +404,7 @@ tap.test("symmetrical with example right-block", function(t) {
 tap.test("readme example", function(t) {
   let a = toPositions([[0, 1], [1, -1]]);
   let b = toPositions([[0, 0], [1, -2]]);
-  let distance = algorithm(a, b);
 
-  t.ok(distance === 0.75);
+  t.ok(distance(a, b) === 0.75);
   t.end();
 });
