@@ -2,7 +2,7 @@ const tap = require("tap");
 const jsc = require("jsverify");
 
 const { calculateResult: algorithm2017 } = require("./assets/algorithm2017.js");
-const { distance, distanceMap } = require("./algorithm.js");
+const { distance, distanceMap, distanceMix } = require("./algorithm.js");
 const { toPositions } = require("./domain/positions.js");
 const {
   positions: positionsMock,
@@ -435,6 +435,98 @@ tap.test("distanceMap", function(t) {
 
     t.ok(distances[1] === distance(a, b1));
     t.ok(distances[2] === distance(a, b2));
+    t.end();
+  });
+
+  t.end();
+});
+
+tap.test("distanceMix", function(t) {
+  tap.test("actual ratio is less than max ratio", function(t) {
+    let a = toPositions([[0, 1], [1, -2], [2, 2], [3, -2], [4, -1]]);
+    let b1 = toPositions([[0, 1]]);
+    let b2 = toPositions([[1, 2], [2, -2], [3, -2], [4, -2]]);
+
+    let ratio = 0.3;
+
+    let d = distanceMix(a, b1, ratio, b2);
+    let dab1 = distance(a, b1);
+    let dab2 = distance(a, b2);
+
+    t.ok(d === 0.2 * dab1 + 0.8 * dab2);
+    t.end();
+  });
+
+  tap.test("actual ratio is larger than max ratio", function(t) {
+    let a = toPositions([[0, 1], [1, -2], [2, 2], [3, -2], [4, -1]]);
+    let b1 = toPositions([[0, 1], [1, 2]]);
+    let b2 = toPositions([[2, -2], [3, -2], [4, -2]]);
+
+    let ratio = 0.3;
+
+    let d = distanceMix(a, b1, ratio, b2);
+    let dab1 = distance(a, b1);
+    let dab2 = distance(a, b2);
+
+    t.ok(d === ratio * dab1 + (1 - ratio) * dab2);
+    t.end();
+  });
+
+  tap.test("actual ratio is less than max ratio with skips", function(t) {
+    let a = toPositions([[-1, 0], [0, 1], [1, -2], [2, 2], [3, -2], [4, -1]]);
+    let b1 = toPositions([[-1, 1], [0, 1]]);
+    let b2 = toPositions([[1, 2], [2, -2], [3, -2], [4, -2]]);
+
+    let ratio = 0.3;
+
+    let d = distanceMix(a, b1, ratio, b2);
+    let dab1 = distance(a, b1);
+    let dab2 = distance(a, b2);
+
+    t.ok(d === 0.2 * dab1 + 0.8 * dab2);
+    t.end();
+  });
+
+  tap.test("actual ratio is larger than max ratio with skips", function(t) {
+    let a = toPositions([[0, 1], [1, 0], [2, 0], [3, -2], [4, -1]]);
+    let b1 = toPositions([[0, 1]]);
+    let b2 = toPositions([[1, 2], [2, -2], [3, -2], [4, -2]]);
+
+    let ratio = 0.3;
+
+    let d = distanceMix(a, b1, ratio, b2);
+    let dab1 = distance(a, b1);
+    let dab2 = distance(a, b2);
+
+    t.ok(d === ratio * dab1 + (1 - ratio) * dab2);
+    t.end();
+  });
+
+  tap.test("actual ratio is 0 should prioritize the other set", function(t) {
+    let a = toPositions([[0, 0], [1, 0], [2, 0], [3, -2], [4, -1]]);
+    let b1 = toPositions([[0, 1]]);
+    let b2 = toPositions([[1, 2], [2, -2], [3, -2], [4, -2]]);
+
+    let ratio = 0.3;
+
+    let d = distanceMix(a, b1, ratio, b2);
+    let dab2 = distance(a, b2);
+
+    t.ok(d === dab2);
+    t.end();
+  });
+
+  tap.test("actual ratio is 1 should still only get max ratio", function(t) {
+    let a = toPositions([[0, 1], [1, 0], [2, 0], [3, 0], [4, 0]]);
+    let b1 = toPositions([[0, 1]]);
+    let b2 = toPositions([[1, 2], [2, -2], [3, -2], [4, -2]]);
+
+    let ratio = 0.3;
+
+    let d = distanceMix(a, b1, ratio, b2);
+    let dab1 = distance(a, b1);
+
+    t.ok(d === ratio * dab1);
     t.end();
   });
 

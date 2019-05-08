@@ -52,6 +52,36 @@ let voterPositions = {
 let distances = distanceMap(voterPositions, partyPositions); // => { "partyA": 0.75, "partyB": 1.0 }
 ```
 
+You can also mix distances according to some max ratio
+
+```js
+import { distanceMix } from "@nrk/valg-valgomat-algoritme";
+
+let partyPositions = {
+  "1": { value: 1 },
+  "2": { value: -1 }
+};
+
+let partyLocalPositions = {
+  "3": { value: 2 },
+  "4": { value: -2 }
+};
+
+let voterPositions = {
+  "1": { value: 0 },
+  "2": { value: -2 },
+  "3": { value: 2 },
+  "4": { value: -2 }
+};
+
+let distance = distanceMix(
+  voterPositions,
+  partyLocalPositions,
+  0.3,
+  partyPositions
+); // => 0.3 * 0.75 + 0.7 * 1.0
+```
+
 ### Validation
 
 In addition, this pacakge comes with some helpful functions for validating your data.
@@ -98,7 +128,11 @@ if (maybeNotOverlapping) {
 ## API
 
 ```js
-import { distance, distanceMap } from "@nrk/valg-valgomat-algoritme";
+import {
+  distance,
+  distanceMap,
+  distanceMix
+} from "@nrk/valg-valgomat-algoritme";
 ```
 
 ### let d = distance(positionsA, positionsB);
@@ -124,6 +158,16 @@ Accepts a set of positions and a map of many sets of positions and returns a map
 This is useful if you want to calculate the distance between one set of positions and many sets of positions. For instance between all parties and a single voter.
 
 Output will be a map from the keys in the positionsMap and the distance to the given position.
+
+### let distance = distanceMix(positionsA, positionsB1, maxRatioAB1, positionsB2);
+
+Accepts three sets of positions and a ratio which applies to the second of the three sets. Returns the distance between the first set of positions to a mix of the two other positions in accordance with the ratio.
+
+The ratio will ensure that the second set will only account for a max fraction of the total distance. If the second set accounts for less than the max fraction that will be used instead.
+
+This function is useful for calculating distances in cases where you have statements from two different pools, for instance a set of local statements and a set of national or ideological statements, and you want them to contribute un-evenly to the total distance .
+
+Output will be a distance which follow the same rules as the output from the `distance`-function.
 
 ### Validation
 

@@ -20,6 +20,25 @@ function combineBy(statements, positionsA, positionsB) {
   });
 }
 
+function distanceGivenStatements(statements, positionsA, positionsB) {
+  if (statements.length === 0) {
+    // NOTE:
+    // This is technically wrong, but in line with old algorithm.
+    // Normally, an empty vector would get a distance of 0%,
+    // since the difference between {} and {} is 0.
+    // This is not a common case, but kept for historical reasons.
+    return 0;
+  }
+
+  let distance = combineBy(statements, positionsA, positionsB)
+    .map(([a, b]) => Math.abs(a - b))
+    .reduce((sum, value) => sum + value);
+
+  let maxPossibleDistance = statements.length * MAX_DIST;
+
+  return (maxPossibleDistance - distance) / maxPossibleDistance;
+}
+
 function distance(positionsA, positionsB) {
   let processPositions = pipe(
     toVector,
@@ -32,22 +51,7 @@ function distance(positionsA, positionsB) {
 
   let answeredStatements = commonStatements(statementsA, statementsB);
 
-  if (answeredStatements.length === 0) {
-    // NOTE:
-    // This is technically wrong, but in line with old algorithm.
-    // Normally, an empty vector would get a distance of 0%,
-    // since the difference between [] and [] is 0.
-    // This is not a common case, but kept for historical reasons.
-    return 0;
-  }
-
-  let distance = combineBy(answeredStatements, positionsA, positionsB)
-    .map(([a, b]) => Math.abs(a - b))
-    .reduce((sum, value) => sum + value);
-
-  let maxPossibleDistance = answeredStatements.length * MAX_DIST;
-
-  return (maxPossibleDistance - distance) / maxPossibleDistance;
+  return distanceGivenStatements(answeredStatements, positionsA, positionsB);
 }
 
 function distanceMap(positionsA, positionsMap) {
@@ -60,7 +64,45 @@ function distanceMap(positionsA, positionsMap) {
   return result;
 }
 
+function distanceMix(positionsA, positionsB1, maxRatioAB1, positionsB2) {
+  let processPositions = pipe(
+    toVector,
+    removeNotAnswered,
+    toStatementSet
+  );
+
+  let statementsA = processPositions(positionsA);
+  let statementsB1 = processPositions(positionsB1);
+  let statementsB2 = processPositions(positionsB2);
+
+  let answeredStatementsAB1 = commonStatements(statementsA, statementsB1);
+  let answeredStatementsAB2 = commonStatements(statementsA, statementsB2);
+
+  let distanceAB1 = distanceGivenStatements(
+    answeredStatementsAB1,
+    positionsA,
+    positionsB1
+  );
+
+  let distanceAB2 = distanceGivenStatements(
+    answeredStatementsAB2,
+    positionsA,
+    positionsB2
+  );
+
+  let totalNumberOfStatements =
+    answeredStatementsAB1.length + answeredStatementsAB2.length;
+  let actualRatioAB1 = answeredStatementsAB1.length / totalNumberOfStatements;
+
+  if (actualRatioAB1 < maxRatioAB1) {
+    return actualRatioAB1 * distanceAB1 + (1 - actualRatioAB1) * distanceAB2;
+  } else {
+    return maxRatioAB1 * distanceAB1 + (1 - maxRatioAB1) * distanceAB2;
+  }
+}
+
 module.exports = {
   distance,
-  distanceMap
+  distanceMap,
+  distanceMix
 };
