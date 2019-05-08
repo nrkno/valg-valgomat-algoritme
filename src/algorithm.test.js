@@ -530,5 +530,45 @@ tap.test("distanceMix", function(t) {
     t.end();
   });
 
+  tap.test("doesn't affect identical positions", function(t) {
+    let a = toPositions([[0, 1], [1, 2], [2, -2], [3, -2], [4, -2]]);
+    let b1 = toPositions([[0, 1]]);
+    let b2 = toPositions([[1, 2], [2, -2], [3, -2], [4, -2]]);
+
+    let ratio = 0.3;
+
+    t.ok(distanceMix(a, b1, ratio, b2) === 1.0);
+    t.end();
+  });
+
+  tap.test("ratios less than max is same as distance", function(t) {
+    let arguments = jsc.suchthat(
+      jsc.pair(
+        arbitraryPositions,
+        jsc.pair(arbitraryPositions, arbitraryPositions)
+      ),
+      ([a, [b, c]]) =>
+        Math.floor(0.3 * a.length) === b.length &&
+        Math.ceil(0.7 * a.length) === c.length &&
+        b.length > 2
+    );
+
+    function check([arrA, [arrB, arrC]]) {
+      let a = toPositions(arrA.map((v, i) => [i, v]));
+      let b = toPositions(arrB.map((v, i) => [i, v]));
+      let c = toPositions(arrC.map((v, i) => [i + arrB.length, v]));
+
+      let ratio = 0.3;
+
+      let mixedDistance = distanceMix(a, b, ratio, c);
+      let nonMixedDistance = distance(a, { ...b, ...c });
+
+      return mixedDistance.toFixed(2) === nonMixedDistance.toFixed(2);
+    }
+
+    jsc.assert(jsc.forall(arguments, check));
+    t.end();
+  });
+
   t.end();
 });
