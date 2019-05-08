@@ -7,7 +7,7 @@ Calculates the distance between two sets of positions. Mostly used to calculate 
 ## Usage
 
 ```js
-import { calculateDistance } from "@nrk/valg-valgomat-algoritme";
+import { distance } from "@nrk/valg-valgomat-algoritme";
 
 let partyPositions = {
   "1": { value: 1 },
@@ -19,7 +19,7 @@ let voterPositions = {
   "2": { value: -2 }
 };
 
-let distance = calculateDistance(partyPositions, voterPositions); // => 0.75
+let d = distance(partyPositions, voterPositions); // => 0.75
 ```
 
 ### Validation
@@ -68,10 +68,10 @@ if (maybeNotOverlapping) {
 ## API
 
 ```js
-import { calculateDistance } from "@nrk/valg-valgomat-algoritme";
+import { distance } from "@nrk/valg-valgomat-algoritme";
 ```
 
-### let distance = calculateDistance(positionsA, positionsB);
+### let d = distance(positionsA, positionsB);
 
 Accepts two sets of positions and returns the distance between them.
 
