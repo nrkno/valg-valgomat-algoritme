@@ -52,10 +52,12 @@ function runAlgoritme2017({ party, voter }) {
 function arrayToPositionsHelper(check) {
   // The order of keys is not really interesing here,
   // but needed for the algorithm to do its thing.
-  return function([arr1, arr2]) {
-    let vector1 = arr1.map((v, i) => [i, v]);
-    let vector2 = arr2.map((v, i) => [i, v]);
-    return check([toPositions(vector1), toPositions(vector2)]);
+  return function(vectors) {
+    let args = vectors
+      .map(vector => vector.map((v, i) => [i, v]))
+      .map(vector => toPositions(vector));
+
+    return check(args);
   };
 }
 
