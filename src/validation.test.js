@@ -7,10 +7,7 @@ const {
 } = require("./validation.js");
 const { toPositions } = require("./domain/positions.js");
 
-const {
-  positions: positionsMock,
-  position: positionMock
-} = require("./__helpers/mocks.js");
+const { positions: positionsMock } = require("./__helpers/mocks.js");
 
 tap.test("validatePositions", function(t) {
   t.test("returns null for valid positions", function(t) {
