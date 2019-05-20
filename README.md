@@ -125,6 +125,27 @@ if (maybeNotOverlapping) {
 }
 ```
 
+### Tools
+
+This package also comes with some tooling to preform certain types of operations.
+
+```js
+import { average } from "@nrk/valg-valgomat-algoritme/tools";
+
+let partyAPositions = {
+  "1": { value: 1 },
+  "2": { value: -1 }
+};
+
+let partyBPositions = {
+  "1": { value: 2 },
+  "2": { value: -2 }
+};
+
+// Calculates the average positions of a set of positions
+let avg = average(partyAPositions, partyBPositions); // { "1": 1.5, "2": -1.5 }
+```
+
 ## API
 
 ```js
@@ -202,6 +223,20 @@ The output will be `null` if no errors are found or a formatted error-message.
 Accepts two sets of positions and checks whether the sets are totaly overlapping, i.o.w. they include the same sets of statements. This is useful for checking that a voter has taken a position (or skipped) on all the presented statements.
 
 The output will be `null` if no errors are found or a formatted error-message.
+
+### Tools
+
+These are helper-functions that combine or operate on positions or sets of positions.
+
+```js
+import { average } from "@nrk/valg-valgomat-algoritme/tools";
+```
+
+#### let avg = average(...manyPositions);
+
+Accepts arbitrarily many sets of positions and calculates the average poisition for all positions in the sets.
+
+Assumes that all positions are overlapping.
 
 ## Installation
 
