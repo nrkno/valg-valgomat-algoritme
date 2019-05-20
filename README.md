@@ -214,7 +214,7 @@ The output will be `null` if no errors are found or a formatted error-message.
 
 Accepts a set of positions and checks whether a position has been taken for all statements. Useful for validating party positions, which have to take a position on all statements.
 
-Skipped statements (the position taken in `0`) or invalid positions (anything that doesn't parse to a number) will result in an error.
+Statements with no position (the position taken is `0`) or invalid positions (anything that doesn't parse to a number) will result in an error.
 
 The output will be `null` if no errors are found or a formatted error-message.
 

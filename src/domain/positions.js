@@ -13,7 +13,7 @@ function toPositions(vector) {
 
 function removeNotAnswered(vector) {
   return vector.filter(function([, position]) {
-    return position !== 0;
+    return !isNaN(position);
   });
 }
 
