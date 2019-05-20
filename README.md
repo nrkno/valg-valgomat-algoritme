@@ -79,7 +79,7 @@ let distance = distanceMix(
   partyLocalPositions,
   0.3,
   partyPositions
-); // => 0.3 * 0.75 + 0.7 * 1.0
+); // => 0.3 * 1.0 + 0.7 * 0.75
 ```
 
 ### Validation
