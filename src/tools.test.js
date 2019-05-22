@@ -4,7 +4,7 @@ const { strict } = require("tcompare");
 
 const { validatePositions } = require("./validation.js");
 
-const { average } = require("./tools.js");
+const { average, weightedAverage } = require("./tools.js");
 const { toPositions } = require("./domain/positions.js");
 
 const { positions: positionsMock } = require("./__helpers/mocks.js");
@@ -54,5 +54,24 @@ tap.test("average of identicals should be identical", function(t) {
   }
 
   jsc.assert(jsc.forall(arbitraryPositions, check));
+  t.end();
+});
+
+tap.test("weighted average should give correct answer", function(t) {
+  let positionsA = toPositions([[0, 1], [1, 1], [2, -1], [3, -1]]);
+  let doubleA = toPositions([[0, 2], [1, 2], [2, -2], [3, -2]]);
+
+  let avg = weightedAverage([2], positionsA);
+
+  t.strictSame(avg, doubleA);
+  t.end();
+});
+
+tap.test("weighted average without enough weights should throw", function(t) {
+  let positionsA = toPositions([[0, 1], [1, 1], [2, -1], [3, -1]]);
+
+  t.throws(() => {
+    let avg = weightedAverage([], positionsA);
+  });
   t.end();
 });

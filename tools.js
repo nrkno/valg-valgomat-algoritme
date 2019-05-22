@@ -1,5 +1,6 @@
-const { average } = require("./src/tools.js");
+const { average, weightedAverage } = require("./src/tools.js");
 
 module.exports = {
-  average
+  average,
+  weightedAverage
 };

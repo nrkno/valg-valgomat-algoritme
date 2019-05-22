@@ -1,7 +1,18 @@
 function average(...positionsSet) {
-  let sumOfPositionSet = positionsSet.reduce(function(sum, positions) {
+  let weights = Array(positionsSet.length).fill(1);
+
+  return weightedAverage(weights, ...positionsSet);
+}
+
+function weightedAverage(weights, ...positionsSet) {
+  if (weights.length !== positionsSet.length) {
+    throw new Error("Need weights for all sets of positions");
+  }
+
+  let sumOfPositionSet = positionsSet.reduce(function(sum, positions, index) {
+    let weight = weights[index];
     for (let statementId in positions) {
-      let value = parseFloat(positions[statementId].value);
+      let value = weight * parseFloat(positions[statementId].value);
       if (!sum[statementId]) {
         sum[statementId] = value;
       } else {
@@ -23,5 +34,6 @@ function average(...positionsSet) {
 }
 
 module.exports = {
-  average
+  average,
+  weightedAverage
 };
