@@ -193,7 +193,7 @@ tap.test("right-empty", function(t) {
 
 tap.test("left just-0s", function(t) {
   let n = 2;
-  let a = positionsMock({ n, positionMock: () => null });
+  let a = positionsMock({ n, positionMock: () => 0 });
   let b = positionsMock({ n });
 
   t.ok(distance(a, b) === 0);
@@ -203,7 +203,7 @@ tap.test("left just-0s", function(t) {
 tap.test("right just-0s", function(t) {
   let n = 2;
   let a = positionsMock({ n });
-  let b = positionsMock({ n, positionMock: () => null });
+  let b = positionsMock({ n, positionMock: () => 0 });
 
   t.ok(distance(a, b) === 0);
   t.end();
@@ -211,8 +211,8 @@ tap.test("right just-0s", function(t) {
 
 tap.test("both just-0s", function(t) {
   let n = 2;
-  let a = positionsMock({ n, positionMock: () => null });
-  let b = positionsMock({ n, positionMock: () => null });
+  let a = positionsMock({ n, positionMock: () => 0 });
+  let b = positionsMock({ n, positionMock: () => 0 });
 
   t.ok(distance(a, b) === 0);
   t.end();
@@ -220,7 +220,7 @@ tap.test("both just-0s", function(t) {
 
 tap.test("left not answered", function(t) {
   let a = toPositions([[0, -2], [1, 1], [2, 2]]);
-  let b = toPositions([[0, 1], [1, 1], [2, null]]);
+  let b = toPositions([[0, 1], [1, 1], [2, 0]]);
 
   t.ok(distance(a, b) === (8 - 3) / 8);
   t.end();
@@ -235,7 +235,7 @@ tap.test("left missing", function(t) {
 });
 
 tap.test("right not answered", function(t) {
-  let a = toPositions([[0, 1], [1, 1], [2, null]]);
+  let a = toPositions([[0, 1], [1, 1], [2, 0]]);
   let b = toPositions([[0, -2], [1, 1], [2, 2]]);
 
   t.ok(distance(a, b) === (8 - 3) / 8);
@@ -251,8 +251,8 @@ tap.test("right missing", function(t) {
 });
 
 tap.test("both not answered", function(t) {
-  let a = toPositions([[0, 1], [1, 1], [2, null], [3, -1]]);
-  let b = toPositions([[0, -2], [1, 1], [2, 2], [3, null]]);
+  let a = toPositions([[0, 1], [1, 1], [2, 0], [3, -1]]);
+  let b = toPositions([[0, -2], [1, 1], [2, 2], [3, 0]]);
 
   t.ok(distance(a, b) === (8 - 3) / 8);
   t.end();
@@ -473,14 +473,7 @@ tap.test("distanceMix", function(t) {
   });
 
   tap.test("actual ratio is less than max ratio with skips", function(t) {
-    let a = toPositions([
-      [-1, null],
-      [0, 1],
-      [1, -2],
-      [2, 2],
-      [3, -2],
-      [4, -1]
-    ]);
+    let a = toPositions([[-1, 0], [0, 1], [1, -2], [2, 2], [3, -2], [4, -1]]);
     let b1 = toPositions([[-1, 1], [0, 1]]);
     let b2 = toPositions([[1, 2], [2, -2], [3, -2], [4, -2]]);
 
@@ -495,7 +488,7 @@ tap.test("distanceMix", function(t) {
   });
 
   tap.test("actual ratio is larger than max ratio with skips", function(t) {
-    let a = toPositions([[0, 1], [1, null], [2, null], [3, -2], [4, -1]]);
+    let a = toPositions([[0, 1], [1, 0], [2, 0], [3, -2], [4, -1]]);
     let b1 = toPositions([[0, 1]]);
     let b2 = toPositions([[1, 2], [2, -2], [3, -2], [4, -2]]);
 
@@ -510,7 +503,7 @@ tap.test("distanceMix", function(t) {
   });
 
   tap.test("actual ratio is 0 should prioritize the other set", function(t) {
-    let a = toPositions([[0, null], [1, null], [2, null], [3, -2], [4, -1]]);
+    let a = toPositions([[0, 0], [1, 0], [2, 0], [3, -2], [4, -1]]);
     let b1 = toPositions([[0, 1]]);
     let b2 = toPositions([[1, 2], [2, -2], [3, -2], [4, -2]]);
 
@@ -524,7 +517,7 @@ tap.test("distanceMix", function(t) {
   });
 
   tap.test("actual ratio is 1 should still only get max ratio", function(t) {
-    let a = toPositions([[0, 1], [1, null], [2, null], [3, null], [4, null]]);
+    let a = toPositions([[0, 1], [1, 0], [2, 0], [3, 0], [4, 0]]);
     let b1 = toPositions([[0, 1]]);
     let b2 = toPositions([[1, 2], [2, -2], [3, -2], [4, -2]]);
 
