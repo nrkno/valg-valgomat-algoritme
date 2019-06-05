@@ -54,11 +54,12 @@ function distance(positionsA, positionsB) {
   return distanceGivenStatements(answeredStatements, positionsA, positionsB);
 }
 
-function distanceMap(positionsA, positionsMap) {
+function distanceMap(positionsA, positionsMap, weights = {}) {
   let result = {};
   for (let id in positionsMap) {
     let positionsB = positionsMap[id];
-    result[id] = distance(positionsA, positionsB);
+    let weight = weights[id] != null ? weights[id] : 1;
+    result[id] = weight * distance(positionsA, positionsB);
   }
 
   return result;

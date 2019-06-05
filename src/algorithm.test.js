@@ -438,6 +438,34 @@ tap.test("distanceMap", function(t) {
     t.end();
   });
 
+  tap.test("can modify distances using weights", function(t) {
+    let b1 = toPositions([[0, 1], [1, -1]]);
+    let b2 = toPositions([[0, 2], [1, -2]]);
+    let map = { 1: b1, 2: b2 };
+
+    let a = toPositions([[0, 1], [1, -2]]);
+
+    let w = 1.05;
+    let distances = distanceMap(a, map, { 1: w });
+
+    t.ok(distances[1] === w * distance(a, b1));
+    t.end();
+  });
+
+  tap.test("can modify distances using 0 weights", function(t) {
+    let b1 = toPositions([[0, 1], [1, -1]]);
+    let b2 = toPositions([[0, 2], [1, -2]]);
+    let map = { 1: b1, 2: b2 };
+
+    let a = toPositions([[0, 1], [1, -2]]);
+
+    let w = 0;
+    let distances = distanceMap(a, map, { 1: w });
+
+    t.ok(distances[1] === w * distance(a, b1));
+    t.end();
+  });
+
   t.end();
 });
 

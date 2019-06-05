@@ -49,7 +49,12 @@ let voterPositions = {
   "2": { value: -2 }
 };
 
-let distances = distanceMap(voterPositions, partyPositions); // => { "partyA": 0.75, "partyB": 1.0 }
+let optionalWeights = {
+  partyA: 1.0,
+  partyB: 1.0
+};
+
+let distances = distanceMap(voterPositions, partyPositions, optionalWeights); // => { "partyA": 0.75, "partyB": 1.0 }
 ```
 
 You can also mix distances according to some max ratio
@@ -175,9 +180,9 @@ Where `value` is in the interval `[-2.0, 2.0]`
 
 Output will be a number in the interval `[0.0, 1.0]` where `0.0` is the largest possible distance and `1.0` is the smallest possible distance (iow. identical).
 
-### let distances = distanceMap(positionsA, positionsMap);
+### let distances = distanceMap(positionsA, positionsMap, optionalWeights = {});
 
-Accepts a set of positions and a map of many sets of positions and returns a map of the distances between a position in the position map and the first position.
+Accepts a set of positions and a map of many sets of positions and returns a map of the distances between a position in the position map and the first position. Optionally provide weights for keys in `positionsMap`, will multiply `distance` with `weight` for that key.
 
 This is useful if you want to calculate the distance between one set of positions and many sets of positions. For instance between all parties and a single voter.
 
