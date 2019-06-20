@@ -266,6 +266,22 @@ tap.test("both missing", function(t) {
   t.end();
 });
 
+tap.test("values near 0 are treated as being twice as far away", function(t) {
+  let a = toPositions([[0, 0], [1, 0]]);
+  let b = toPositions([[0, 1], [1, -1]]);
+
+  t.ok(distance(a, b) === 0.5);
+  t.end();
+});
+
+tap.test("values near 0 cannot get more than the max distance", function(t) {
+  let a = toPositions([[0, -0.3], [1, 0.3]]);
+  let b = toPositions([[0, 2], [1, -2]]);
+
+  t.ok(distance(a, b) === 0.0);
+  t.end();
+});
+
 tap.test("symmetrical with example left-block", function(t) {
   let left = [
     ["3", -0.25],
@@ -403,9 +419,9 @@ tap.test("symmetrical with example right-block", function(t) {
 
 tap.test("readme example", function(t) {
   let a = toPositions([[0, 1], [1, -1]]);
-  let b = toPositions([[0, 0], [1, -2]]);
+  let b = toPositions([[0, -2], [1, 2]]);
 
-  t.ok(distance(a, b) === 0.75);
+  t.ok(distance(a, b) === 0.25);
   t.end();
 });
 
