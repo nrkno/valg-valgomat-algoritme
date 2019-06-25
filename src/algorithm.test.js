@@ -1,53 +1,12 @@
 const tap = require("tap");
 const jsc = require("jsverify");
 
-const { calculateResult: algorithm2017 } = require("./assets/algorithm2017.js");
 const { distance, distanceMap, distanceMix } = require("./algorithm.js");
 const { toPositions } = require("./domain/positions.js");
 const {
   positions: positionsMock,
   position: positionMock
 } = require("./__helpers/mocks.js");
-
-function runAlgoritme2017({ party, voter }) {
-  function mapToOldAnswer(positions, statementId) {
-    /*
-    Old positions structure:
-    type Poisitions {
-      statementId: number,
-      selectedAlternative: {
-        id: number,
-        label: string,
-        modifier: string,
-        stance: AlternativeStance,
-      },
-      isPrioritized?: boolean
-    }
-    */
-    return {
-      statementId,
-      selectedAlternative: {
-        id: Math.random(),
-        label: "N/A",
-        modifier: "N/A",
-        stance: positions[statementId].value
-      },
-      isPrioritized: false
-    };
-  }
-
-  let oldAnswer = Object.keys(voter).map(mapToOldAnswer.bind(null, voter));
-  let oldParties = [
-    {
-      id: 0,
-      answers: Object.keys(party).map(mapToOldAnswer.bind(null, party))
-    }
-  ];
-
-  let [closeness] = algorithm2017(oldParties, oldAnswer);
-
-  return closeness.scorePercent;
-}
 
 function arrayToPositionsHelper(check) {
   // The order of keys is not really interesing here,
@@ -63,35 +22,7 @@ function arrayToPositionsHelper(check) {
 
 let arbitraryPositions = jsc.array(jsc.number(-2, 2));
 
-// Arbitrary set of positions without skips
-let arbitraryPositionsWithoutZeroes = jsc.array(
-  jsc.oneof(jsc.integer(-2, -1), jsc.integer(1, 2))
-);
-
 // Property based tests
-
-// NOTE: This test and associated assets can probably be deleted after the election in 2019.
-tap.test("identical to 2017 algorithm", function(t) {
-  // Ensure equal length and therefore identical set of answered statements.
-  // Handling of un-even sets of answered statements is different.
-  // Filtering out skipped statements works differently, so we'll avoid that.
-  let arbitraryPositionsPair = jsc.suchthat(
-    jsc.pair(arbitraryPositionsWithoutZeroes, arbitraryPositionsWithoutZeroes),
-    ([a, b]) => a.length === b.length
-  );
-
-  function check([a, b]) {
-    let d = distance(a, b);
-    let dOld = runAlgoritme2017({ party: a, voter: b });
-
-    return d === dOld;
-  }
-
-  let wrappedCheck = arrayToPositionsHelper(check);
-
-  jsc.assert(jsc.forall(arbitraryPositionsPair, wrappedCheck));
-  t.end();
-});
 
 tap.test("algorithm is symmetrical", function(t) {
   let arbitraryPositionsPair = jsc.suchthat(
