@@ -71,7 +71,7 @@ tap.test("weighted average without enough weights should throw", function(t) {
   let positionsA = toPositions([[0, 1], [1, 1], [2, -1], [3, -1]]);
 
   t.throws(() => {
-    let avg = weightedAverage([], positionsA);
+    weightedAverage([], positionsA);
   });
   t.end();
 });
