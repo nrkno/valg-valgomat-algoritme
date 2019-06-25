@@ -28,9 +28,6 @@
     "url": "https://github.com/nrkno/valg-valgomat-algoritme/issues"
   },
   "homepage": "https://github.com/nrkno/valg-valgomat-algoritme#readme",
-  "publishConfig": {
-    "access": "restricted"
-  },
   "devDependencies": {
     "eslint": "^5.16.0",
     "jsverify": "0.8.4",
