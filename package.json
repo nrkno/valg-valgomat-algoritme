@@ -1,6 +1,6 @@
 {
   "name": "@nrk/valg-valgomat-algoritme",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "The algorithm used to calculate distance between sets of positions for NRKs Valgomat",
   "main": "src/algorithm.js",
   "scripts": {
@@ -28,6 +28,9 @@
     "url": "https://github.com/nrkno/valg-valgomat-algoritme/issues"
   },
   "homepage": "https://github.com/nrkno/valg-valgomat-algoritme#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "eslint": "^5.16.0",
     "jsverify": "0.8.4",
