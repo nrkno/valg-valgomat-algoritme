@@ -1,4 +1,4 @@
-# Valg Valgomat Algorithm
+# Valgomat algorithm
 
 > Calculate the distance betwen two sets of positions.
 
