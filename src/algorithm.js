@@ -80,45 +80,7 @@ function distanceMap(positionsA, positionsMap, weights = {}) {
   return result;
 }
 
-function distanceMix(positionsA, positionsB1, maxRatioAB1, positionsB2) {
-  let processPositions = pipe(
-    toVector,
-    removeNotAnswered,
-    toStatementSet
-  );
-
-  let statementsA = processPositions(positionsA);
-  let statementsB1 = processPositions(positionsB1);
-  let statementsB2 = processPositions(positionsB2);
-
-  let answeredStatementsAB1 = commonStatements(statementsA, statementsB1);
-  let answeredStatementsAB2 = commonStatements(statementsA, statementsB2);
-
-  let distanceAB1 = distanceGivenStatements(
-    answeredStatementsAB1,
-    positionsA,
-    positionsB1
-  );
-
-  let distanceAB2 = distanceGivenStatements(
-    answeredStatementsAB2,
-    positionsA,
-    positionsB2
-  );
-
-  let totalNumberOfStatements =
-    answeredStatementsAB1.length + answeredStatementsAB2.length;
-  let actualRatioAB1 = answeredStatementsAB1.length / totalNumberOfStatements;
-
-  if (actualRatioAB1 < maxRatioAB1) {
-    return actualRatioAB1 * distanceAB1 + (1 - actualRatioAB1) * distanceAB2;
-  } else {
-    return maxRatioAB1 * distanceAB1 + (1 - maxRatioAB1) * distanceAB2;
-  }
-}
-
 module.exports = {
   distance,
-  distanceMap,
-  distanceMix
+  distanceMap
 };
