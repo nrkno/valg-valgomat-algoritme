@@ -1,6 +1,6 @@
 # Valgomat algorithm
 
-> Calculate the distance betwen two sets of positions.
+> Calculate the distance between two sets of positions.
 
 Calculates the distance between two sets of positions. Mostly used to calculate the distance between various party positions and a voter position.
 
