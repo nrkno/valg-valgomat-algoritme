@@ -5,5 +5,5 @@ function pipe(...fns) {
 }
 
 module.exports = {
-  pipe
+  pipe,
 };

@@ -35,5 +35,5 @@ function weightedAverage(weights, ...positionsSet) {
 
 module.exports = {
   average,
-  weightedAverage
+  weightedAverage,
 };

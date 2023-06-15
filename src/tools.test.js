@@ -30,7 +30,7 @@ tap.test("average should be correct", function(t) {
     1: { value: 0 },
     2: { value: 0 },
     3: { value: 0 },
-    4: { value: 0 }
+    4: { value: 0 },
   });
   t.end();
 });
@@ -38,7 +38,7 @@ tap.test("average should be correct", function(t) {
 tap.test("average of identicals should be identical", function(t) {
   let arbitraryPositions = jsc.suchthat(
     jsc.array(jsc.number(-2, 2)),
-    a => a.length > 10
+    (a) => a.length > 10
   );
 
   function check(vector) {

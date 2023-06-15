@@ -8,17 +8,17 @@ This pacakge also includes some helpful functions for validating the data that g
 import {
   validatePositions,
   validatePositionsTaken,
-  validateOverlappingPositions
+  validateOverlappingPositions,
 } from "@nrk/valg-valgomat-algoritme/validation";
 
 let partyPositions = {
   "1": { value: 1 },
-  "2": { value: -1 }
+  "2": { value: -1 },
 };
 
 let voterPositions = {
   "1": { value: 0 },
-  "2": { value: -2 }
+  "2": { value: -2 },
 };
 
 // Validates that all positions taken are valid positions -2|-1|0|1|2
@@ -49,7 +49,7 @@ if (maybeNotOverlapping) {
 import {
   validatePositions,
   validatePositionsTaken,
-  validateOverlappingPositions
+  validateOverlappingPositions,
 } from "@nrk/valg-valgomat-algoritme/validation";
 ```
 

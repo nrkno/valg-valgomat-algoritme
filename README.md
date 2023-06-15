@@ -13,12 +13,12 @@ import { distance } from "@nrk/valg-valgomat-algoritme";
 
 let partyPositions = {
   "1": { value: 1 },
-  "2": { value: -1 }
+  "2": { value: -1 },
 };
 
 let voterPositions = {
   "1": { value: -2 },
-  "2": { value: 2 }
+  "2": { value: 2 },
 };
 
 let d = distance(partyPositions, voterPositions); // => 0.25
@@ -31,27 +31,27 @@ import { distanceMap } from "@nrk/valg-valgomat-algoritme";
 
 let partyAPositions = {
   "1": { value: 1 },
-  "2": { value: -1 }
+  "2": { value: -1 },
 };
 
 let partyBPositions = {
   "1": { value: 2 },
-  "2": { value: -2 }
+  "2": { value: -2 },
 };
 
 let partyPostitions = {
   partyA: partyAPositions,
-  partyB: partyBPositions
+  partyB: partyBPositions,
 };
 
 let voterPositions = {
   "1": { value: 0 },
-  "2": { value: -2 }
+  "2": { value: -2 },
 };
 
 let optionalWeights = {
   partyA: 1.0,
-  partyB: 1.0
+  partyB: 1.0,
 };
 
 let distances = distanceMap(voterPositions, partyPositions, optionalWeights); // => { "partyA": 0.75, "partyB": 1.0 }

@@ -1,11 +1,11 @@
 const {
   validatePositions,
   validatePositionsTaken,
-  validateOverlappingPositions
+  validateOverlappingPositions,
 } = require("./src/validate.js");
 
 module.exports = {
   validatePositions,
   validatePositionsTaken,
-  validateOverlappingPositions
+  validateOverlappingPositions,
 };

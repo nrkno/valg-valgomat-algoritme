@@ -5,7 +5,7 @@ const { distance, distanceMap } = require("./algorithm.js");
 const { toPositions } = require("./domain/positions.js");
 const {
   positions: positionsMock,
-  position: positionMock
+  position: positionMock,
 } = require("./__helpers/mocks.js");
 
 function arrayToPositionsHelper(check) {
@@ -13,8 +13,8 @@ function arrayToPositionsHelper(check) {
   // but needed for the algorithm to do its thing.
   return function(vectors) {
     let args = vectors
-      .map(vector => vector.map((v, i) => [i, v]))
-      .map(vector => toPositions(vector));
+      .map((vector) => vector.map((v, i) => [i, v]))
+      .map((vector) => toPositions(vector));
 
     return check(args);
   };
@@ -229,7 +229,7 @@ tap.test("symmetrical with example left-block", function(t) {
     ["391", 0.25],
     ["411", -0.5],
     ["432", -0.5],
-    ["442", 0.25]
+    ["442", 0.25],
   ];
   let voter = [
     ["3", positionMock()],
@@ -246,7 +246,7 @@ tap.test("symmetrical with example left-block", function(t) {
     ["391", positionMock()],
     ["411", positionMock()],
     ["432", positionMock()],
-    ["442", positionMock()]
+    ["442", positionMock()],
   ];
   let a = toPositions(left);
   let b = toPositions(voter);
@@ -274,7 +274,7 @@ tap.test("symmetrical with example centre-block", function(t) {
     ["391", -0.33],
     ["411", -0.66],
     ["432", 0.33],
-    ["442", 0.66]
+    ["442", 0.66],
   ];
   let voter = [
     ["3", positionMock()],
@@ -291,7 +291,7 @@ tap.test("symmetrical with example centre-block", function(t) {
     ["391", positionMock()],
     ["411", positionMock()],
     ["432", positionMock()],
-    ["442", positionMock()]
+    ["442", positionMock()],
   ];
   let a = toPositions(centre);
   let b = toPositions(voter);
@@ -319,7 +319,7 @@ tap.test("symmetrical with example right-block", function(t) {
     ["391", -1],
     ["411", -1],
     ["432", 1],
-    ["442", -1]
+    ["442", -1],
   ];
   let voter = [
     ["3", positionMock()],
@@ -336,7 +336,7 @@ tap.test("symmetrical with example right-block", function(t) {
     ["391", positionMock()],
     ["411", positionMock()],
     ["432", positionMock()],
-    ["442", positionMock()]
+    ["442", positionMock()],
   ];
   let a = toPositions(right);
   let b = toPositions(voter);
@@ -360,7 +360,7 @@ tap.test("distanceMap", function(t) {
   tap.test("result includes all ids passed", function(t) {
     let map = {
       1: toPositions([[0, 1], [1, -1]]),
-      2: toPositions([[0, 2], [1, -2]])
+      2: toPositions([[0, 2], [1, -2]]),
     };
 
     let a = toPositions([[0, 1], [1, -2]]);

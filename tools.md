@@ -9,12 +9,12 @@ import { average, weightedAverage } from "@nrk/valg-valgomat-algoritme/tools";
 
 let partyAPositions = {
   "1": { value: 1 },
-  "2": { value: -1 }
+  "2": { value: -1 },
 };
 
 let partyBPositions = {
   "1": { value: 2 },
-  "2": { value: -2 }
+  "2": { value: -2 },
 };
 
 // Calculates the average positions of a set of positions

@@ -2,7 +2,7 @@ const {
   toVector,
   removeNotAnswered,
   toStatementSet,
-  commonStatements
+  commonStatements,
 } = require("./domain/positions.js");
 
 const { pipe } = require("./domain/functions.js");
@@ -82,5 +82,5 @@ function distanceMap(positionsA, positionsMap, weights = {}) {
 
 module.exports = {
   distance,
-  distanceMap
+  distanceMap,
 };

@@ -3,7 +3,7 @@ const tap = require("tap");
 const {
   validatePositions,
   validatePositionsTaken,
-  validateOverlappingPositions
+  validateOverlappingPositions,
 } = require("./validation.js");
 const { toPositions } = require("./domain/positions.js");
 

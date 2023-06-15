@@ -22,7 +22,7 @@ function toStatementSet(vector) {
 }
 
 function commonStatements(statementSetA, statementSetB) {
-  return statementSetA.filter(id => statementSetB.includes(id));
+  return statementSetA.filter((id) => statementSetB.includes(id));
 }
 
 module.exports = {
@@ -30,5 +30,5 @@ module.exports = {
   toPositions,
   removeNotAnswered,
   toStatementSet,
-  commonStatements
+  commonStatements,
 };

@@ -16,5 +16,5 @@ function positions({ n, positionMock = position }) {
 
 module.exports = {
   positions,
-  position
+  position,
 };

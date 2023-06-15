@@ -60,8 +60,8 @@ function validateOverlappingPositions(positionsA, positionsB) {
   let statementsB = processPositions(positionsB);
 
   let allOverlapping = statementsA
-    .map(id => statementsB.includes(id))
-    .concat(statementsB.map(id => statementsA.includes(id)))
+    .map((id) => statementsB.includes(id))
+    .concat(statementsB.map((id) => statementsA.includes(id)))
     .reduce((acc, v) => acc && v);
 
   if (!allOverlapping) {
@@ -72,5 +72,5 @@ function validateOverlappingPositions(positionsA, positionsB) {
 module.exports = {
   validatePositions,
   validatePositionsTaken,
-  validateOverlappingPositions
+  validateOverlappingPositions,
 };
