@@ -50,7 +50,7 @@ tap.test("not answered and missing are identical", function(t) {
   );
 
   function check([a, b]) {
-    return distance(a, b) === 0;
+    return distance(a, b) === null;
   }
 
   let wrappedCheck = arrayToPositionsHelper(check);
@@ -102,7 +102,7 @@ tap.test("both empty", function(t) {
   let a = {};
   let b = {};
 
-  t.ok(distance(a, b) === 0);
+  t.ok(distance(a, b) === null);
   t.end();
 });
 
@@ -110,7 +110,7 @@ tap.test("left-empty", function(t) {
   let a = positionsMock({ n: 2 });
   let b = {};
 
-  t.ok(distance(a, b) === 0);
+  t.ok(distance(a, b) === null);
   t.end();
 });
 
@@ -118,7 +118,7 @@ tap.test("right-empty", function(t) {
   let a = {};
   let b = positionsMock({ n: 2 });
 
-  t.ok(distance(a, b) === 0);
+  t.ok(distance(a, b) === null);
   t.end();
 });
 
@@ -127,7 +127,7 @@ tap.test("left just-0s", function(t) {
   let a = positionsMock({ n, positionMock: () => null });
   let b = positionsMock({ n });
 
-  t.ok(distance(a, b) === 0);
+  t.ok(distance(a, b) === null);
   t.end();
 });
 
@@ -136,7 +136,7 @@ tap.test("right just-0s", function(t) {
   let a = positionsMock({ n });
   let b = positionsMock({ n, positionMock: () => null });
 
-  t.ok(distance(a, b) === 0);
+  t.ok(distance(a, b) === null);
   t.end();
 });
 
@@ -145,7 +145,7 @@ tap.test("both just-0s", function(t) {
   let a = positionsMock({ n, positionMock: () => null });
   let b = positionsMock({ n, positionMock: () => null });
 
-  t.ok(distance(a, b) === 0);
+  t.ok(distance(a, b) === null);
   t.end();
 });
 

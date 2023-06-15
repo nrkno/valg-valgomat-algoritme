@@ -37,11 +37,11 @@ function differenceWith0Handling(a, b) {
 function distanceGivenStatements(statements, positionsA, positionsB) {
   if (statements.length === 0) {
     // NOTE:
-    // This is technically wrong, but in line with old algorithm.
-    // Normally, an empty vector would get a distance of 0%,
-    // since the difference between {} and {} is 0.
-    // This is not a common case, but kept for historical reasons.
-    return 0;
+    // If there are no statements, the difference would be unknowable. So we
+    // return null in this case. This used to return 0 for historical reasons,
+    // but this reason is no longer valid and we need to distinguish between
+    // furthest apart (0% common) and unknown.
+    return null;
   }
 
   let distance = combineBy(statements, positionsA, positionsB)

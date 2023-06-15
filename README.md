@@ -79,6 +79,8 @@ Where `value` is in the interval `[-2.0, 2.0]`
 
 Output will be a number in the interval `[0.0, 1.0]` where `0.0` is the largest possible distance and `1.0` is the smallest possible distance (iow. identical).
 
+If we are unable to determine a distance, the output will be `null`. This happens if we are comparing a pair of vectors where one of the vectors are empty.
+
 If a `value` is close to `0` (currently defined as `+/-0.3`), it will be handled as a special case and given twice the distance to a value that is not close to `0`. I.e. the distance between `0.1` and `1.0` will become `1.8`.
 
 This is done to more accuratly represent the situation where a party, voter or model party is taking a position close to `0`. Such a position is considered as a completely unknown position, it could go either way when one is forced to consider it. Comparing moderate positions (`-1/1`) to this unknown position would be unreasonably favorable if we hadn't implemented this mechanism.
