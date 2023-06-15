@@ -427,5 +427,19 @@ tap.test("distanceMap", function(t) {
     t.end();
   });
 
+  tap.test("preserves null logic for unknowable distances", function(t) {
+    let b1 = toPositions([[0, 1], [1, -1]]);
+    let b2 = toPositions([[2, 2], [3, -2]]);
+    let map = { 1: b1, 2: b2 };
+
+    let a = b1;
+
+    let distances = distanceMap(a, map);
+
+    t.ok(distances[1] === 1.0);
+    t.ok(distances[2] === null);
+    t.end();
+  });
+
   t.end();
 });

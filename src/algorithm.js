@@ -73,8 +73,13 @@ function distanceMap(positionsA, positionsMap, weights = {}) {
   for (let id in positionsMap) {
     let positionsB = positionsMap[id];
     let weight = weights[id] != null ? weights[id] : 1;
-    let weightedDistance = weight * distance(positionsA, positionsB);
-    result[id] = weightedDistance >= 1.0 ? 1.0 : weightedDistance;
+    let calculatedDistance = distance(positionsA, positionsB);
+    if (calculatedDistance == null) {
+      result[id] = calculatedDistance;
+    } else {
+      let weightedDistance = weight * calculatedDistance;
+      result[id] = weightedDistance >= 1.0 ? 1.0 : weightedDistance;
+    }
   }
 
   return result;
