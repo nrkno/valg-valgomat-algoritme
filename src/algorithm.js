@@ -53,7 +53,7 @@ function distanceGivenStatements(statements, positionsA, positionsB) {
   return (maxPossibleDistance - distance) / maxPossibleDistance;
 }
 
-function distance(positionsA, positionsB) {
+function proximity(positionsA, positionsB) {
   let processPositions = pipe(
     toVector,
     removeNotAnswered,
@@ -68,12 +68,12 @@ function distance(positionsA, positionsB) {
   return distanceGivenStatements(answeredStatements, positionsA, positionsB);
 }
 
-function distanceMap(positionsA, positionsMap, weights = {}) {
+function proximityMap(positionsA, positionsMap, weights = {}) {
   let result = {};
   for (let id in positionsMap) {
     let positionsB = positionsMap[id];
     let weight = weights[id] != null ? weights[id] : 1;
-    let calculatedDistance = distance(positionsA, positionsB);
+    let calculatedDistance = proximity(positionsA, positionsB);
     if (calculatedDistance == null) {
       result[id] = calculatedDistance;
     } else {
@@ -86,6 +86,6 @@ function distanceMap(positionsA, positionsMap, weights = {}) {
 }
 
 module.exports = {
-  distance,
-  distanceMap,
+  proximity,
+  proximityMap,
 };
