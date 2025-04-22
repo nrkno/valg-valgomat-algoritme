@@ -49,12 +49,7 @@ let voterPositions = {
   "2": { value: -2 },
 };
 
-let optionalWeights = {
-  partyA: 1.0,
-  partyB: 1.0,
-};
-
-let proximities = proximityMap(voterPositions, partyPositions, optionalWeights);
+let proximities = proximityMap(voterPositions, partyPositions);
 // => { "partyA": 0.75, "partyB": 1.0 }
 ```
 
@@ -82,9 +77,9 @@ Output will be a number in the interval `[0.0, 1.0]` where `0.0` is the furthest
 
 If we are unable to determine a proximity, the output will be `null`. This happens if we are comparing a pair of vectors where one of the vectors are empty.
 
-### let proximities = proximityMap(positionsA, positionsMap, optionalWeights = {});
+### let proximities = proximityMap(positionsA, positionsMap);
 
-Accepts a set of positions and a map of many sets of positions and returns a map of the proximities between a position in the position map and the first position. Optionally provide weights for keys in `positionsMap`, will multiply `proximity` with `weight` for that key.
+Accepts a set of positions and a map of many sets of positions and returns a map of the proximities between a position in the position map and the first position.
 
 This is useful if you want to calculate the proximity of one set of positions and many sets of positions. For instance between all parties and a single voter.
 

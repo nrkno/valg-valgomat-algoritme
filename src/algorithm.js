@@ -58,18 +58,12 @@ function proximity(positionsA, positionsB) {
   return distanceGivenStatements(answeredStatements, positionsA, positionsB);
 }
 
-function proximityMap(positionsA, positionsMap, weights = {}) {
+function proximityMap(positionsA, positionsMap) {
   let result = {};
   for (let id in positionsMap) {
     let positionsB = positionsMap[id];
-    let weight = weights[id] != null ? weights[id] : 1;
     let calculatedDistance = proximity(positionsA, positionsB);
-    if (calculatedDistance == null) {
-      result[id] = calculatedDistance;
-    } else {
-      let weightedDistance = weight * calculatedDistance;
-      result[id] = weightedDistance >= 1.0 ? 1.0 : weightedDistance;
-    }
+    result[id] = calculatedDistance;
   }
 
   return result;
