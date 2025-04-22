@@ -1,7 +1,10 @@
 const tap = require("tap");
 const jsc = require("jsverify");
 
-const { distance, distanceMap } = require("./algorithm.js");
+const {
+  proximity: distance,
+  proximityMap: distanceMap,
+} = require("./algorithm.js");
 const { toPositions } = require("./domain/positions.js");
 const {
   positions: positionsMock,
@@ -353,6 +356,19 @@ tap.test("readme example", function(t) {
   let b = toPositions([[0, -2], [1, 2]]);
 
   t.ok(distance(a, b) === 0.25);
+  t.end();
+});
+
+tap.test("readme example 2", function(t) {
+  let a = toPositions([[0, 1], [1, -1]]);
+  let b = toPositions([[0, 2], [1, -2]]);
+
+  let voter = toPositions([[0, null], [1, -2]]);
+
+  let distances = distanceMap(voter, { a, b });
+
+  t.ok(distances["a"] === 0.75);
+  t.ok(distances["b"] === 1.0);
   t.end();
 });
 
