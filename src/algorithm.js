@@ -20,18 +20,8 @@ function combineBy(statements, positionsA, positionsB) {
   });
 }
 
-function closeTo0(a) {
-  return a >= -0.3 && a <= 0.3;
-}
-
-function differenceWith0Handling(a, b) {
-  // XOR
-  if ((closeTo0(a) || closeTo0(b)) && !(closeTo0(a) && closeTo0(b))) {
-    let difference = 2 * Math.abs(a - b);
-    return difference <= MAX_DIST ? difference : MAX_DIST;
-  } else {
-    return Math.abs(a - b);
-  }
+function difference(a, b) {
+  return Math.abs(a - b);
 }
 
 function distanceGivenStatements(statements, positionsA, positionsB) {
@@ -45,7 +35,7 @@ function distanceGivenStatements(statements, positionsA, positionsB) {
   }
 
   let distance = combineBy(statements, positionsA, positionsB)
-    .map(([a, b]) => differenceWith0Handling(a, b))
+    .map(([a, b]) => difference(a, b))
     .reduce((sum, value) => sum + value);
 
   let maxPossibleDistance = statements.length * MAX_DIST;
