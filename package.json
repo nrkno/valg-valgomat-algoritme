@@ -6,7 +6,8 @@
   "scripts": {
     "test": "tap src/*.test.js -Rdot",
     "coverage": "npm run test -- --coverage-report=html",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "format": "prettier -w src/"
   },
   "files": [
     "src"
@@ -32,9 +33,13 @@
   "devDependencies": {
     "eslint": "^5.16.0",
     "jsverify": "0.8.4",
-    "prettier": "^1.17.0",
+    "prettier": "^3.5.3",
     "tap": "^21.1.0"
   },
   "dependencies": {},
+  "prettier": {
+    "printWidth": 100,
+    "semi": false,
+    "singleQuote": true
   }
 }

@@ -9,54 +9,54 @@ Calculates the proximity of two sets of positions. Mostly used to calculate the 
 The simple case is comparing to sets of positions.
 
 ```js
-import { proximity } from "@nrk/valg-valgomat-algoritme";
+import { proximity } from '@nrk/valg-valgomat-algoritme'
 
 let partyPositions = {
-  "1": { value: 1 },
-  "2": { value: -1 },
-};
+  1: { value: 1 },
+  2: { value: -1 },
+}
 
 let voterPositions = {
-  "1": { value: -2 },
-  "2": { value: 2 },
-};
+  1: { value: -2 },
+  2: { value: 2 },
+}
 
-let p = proximity(partyPositions, voterPositions); // => 0.25
+let p = proximity(partyPositions, voterPositions) // => 0.25
 ```
 
 The module also comes with a function to compare many positions to one position.
 
 ```js
-import { proximityMap } from "@nrk/valg-valgomat-algoritme";
+import { proximityMap } from '@nrk/valg-valgomat-algoritme'
 
 let partyAPositions = {
-  "1": { value: 1 },
-  "2": { value: -1 },
-};
+  1: { value: 1 },
+  2: { value: -1 },
+}
 
 let partyBPositions = {
-  "1": { value: 2 },
-  "2": { value: -2 },
-};
+  1: { value: 2 },
+  2: { value: -2 },
+}
 
 let partyPostitions = {
   partyA: partyAPositions,
   partyB: partyBPositions,
-};
+}
 
 let voterPositions = {
-  "1": { value: null },
-  "2": { value: -2 },
-};
+  1: { value: null },
+  2: { value: -2 },
+}
 
-let proximities = proximityMap(voterPositions, partyPositions);
+let proximities = proximityMap(voterPositions, partyPositions)
 // => { "partyA": 0.75, "partyB": 1.0 }
 ```
 
 ## API
 
 ```js
-import { proximity, proximityMap } from "@nrk/valg-valgomat-algoritme";
+import { proximity, proximityMap } from '@nrk/valg-valgomat-algoritme'
 ```
 
 ### let d = proximity(positionsA, positionsB);
