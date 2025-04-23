@@ -85,10 +85,6 @@ This is useful if you want to calculate the proximity of one set of positions an
 
 Output will be a map from the keys in the positionsMap and the proximity to the given position.
 
-## Extra
-
-See [validation](./validation.md) for documentation on some of the extra features of this pacakge.
-
 ## Installation
 
 ```sh

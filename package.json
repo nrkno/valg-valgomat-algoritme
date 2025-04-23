@@ -9,8 +9,7 @@
     "lint": "eslint src/"
   },
   "files": [
-    "src",
-    "validation.js"
+    "src"
   ],
   "repository": {
     "type": "git",
