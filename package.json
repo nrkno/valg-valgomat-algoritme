@@ -10,7 +10,6 @@
   },
   "files": [
     "src",
-    "tools.js",
     "validation.js"
   ],
   "repository": {
