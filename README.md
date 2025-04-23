@@ -87,7 +87,7 @@ Output will be a map from the keys in the positionsMap and the proximity to the 
 
 ## Extra
 
-See [validation](./validation.md) or [tools](./tools.md) for documentation on some of the extra features of this pacakge.
+See [validation](./validation.md) for documentation on some of the extra features of this pacakge.
 
 ## Installation
 
