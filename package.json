@@ -4,14 +4,22 @@
   "description": "The algorithm used to calculate distance between sets of positions for NRKs Valgomat",
   "main": "src/algorithm.js",
   "scripts": {
-    "test": "tap src/*.test.js -Rdot",
+    "test": "tap src/*.test.js -Rterse",
     "coverage": "npm run test -- --coverage-report=html",
     "lint": "eslint src/",
-    "format": "prettier -w src/"
+    "format": "prettier -w src/",
+    "typecheck": "tsc -p ./jsconfig.json"
   },
   "files": [
+    "types.d.ts",
     "src"
   ],
+  "exports": {
+    ".": {
+      "default": "./src/algorithm.js",
+      "types": "./types.d.ts"
+    }
+  },
   "type": "module",
   "repository": {
     "type": "git",
@@ -36,7 +44,8 @@
     "eslint": "^9.25.1",
     "jsverify": "0.8.4",
     "prettier": "^3.5.3",
-    "tap": "^21.1.0"
+    "tap": "^21.1.0",
+    "typescript": "^5.8.3"
   },
   "volta": {
     "node": "22.15.0"
