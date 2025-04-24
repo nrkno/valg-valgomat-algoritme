@@ -21,7 +21,8 @@ let voterPositions = {
   2: { value: 2 },
 }
 
-let p = proximity(partyPositions, voterPositions) // => 0.25
+let p = proximity(partyPositions, voterPositions)
+// => 0.25
 ```
 
 The module also comes with a function to compare many positions to one position.
@@ -67,7 +68,7 @@ Positions are given in the form of sets:
 
 ```ts
 {
-  [statement: string]: { value: number }
+  [statement: string]: { value: -2 | -1 | 1 | -2 | null }
 }
 ```
 
@@ -75,7 +76,7 @@ Where `value` is in the interval `[-2.0, 2.0]`
 
 Output will be a number in the interval `[0.0, 1.0]` where `0.0` is the furthest away and `1.0` is the closest possible proximity (iow. identical).
 
-If we are unable to determine a proximity, the output will be `null`. This happens if we are comparing a pair of vectors where one of the vectors are empty.
+If we are unable to determine a proximity, the output will be `null`. This happens if we are comparing a pair of vectors where one of the vectors are empty or there are no overlapping statements.
 
 ### let proximities = proximityMap(positionsA, positionsMap);
 
@@ -97,15 +98,3 @@ npm install @nrk/valg-valgomat-algoritme
 - Statement = Påstand
 - Party = Parti
 - Voter = Velger
-
-## A note on codestyle
-
-This module uses default configuration of Prettier.
-
-This module uses CommonJS/Node-style `require` for broadest possible ecosystem-compatbility without additional compile-steps.
-
-This module uses a fairly modern flavor of JavaScript and will require compilation if it is to be used with older runtimes.
-
-## See also
-
-- [valg-valgomat](https://github.com/nrkno/valg-valgomat)

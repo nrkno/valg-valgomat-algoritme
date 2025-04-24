@@ -1,15 +1,25 @@
 import { toPositions } from '../domain/positions.js'
 
-export function position(lower = -2, upper = 2) {
-  // NOTE: Interval is (lower, upper]
-  // Doesn't need to include upper due to how the algorithm works.
-  return lower + (upper - lower) * Math.random()
+/**
+ * Function that generates a random position among the valid positions
+ * @returns {ValgomatAlgoritme.PositionValue}
+ */
+export function position() {
+  /** @type {[-2, -1, 1, 2]} */
+  let values = [-2, -1, 1, 2]
+
+  return values[Math.floor(4 * Math.random())]
 }
 
-export function positions({ n, positionMock = position }) {
+/**
+ * @param {number} n
+ * @param {() => (ValgomatAlgoritme.PositionValue | null)} [mockFn]
+ * @returns {ValgomatAlgoritme.Positions}
+ */
+export function positions(n, mockFn = position) {
   return toPositions(
     Array(n)
       .fill(1)
-      .map((_, i) => [i, positionMock()]),
+      .map((_, i) => [`${i}`, mockFn()]),
   )
 }
