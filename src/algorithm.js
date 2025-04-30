@@ -16,10 +16,10 @@ function combineBy(statements, positionsA, positionsB) {
   return statements.map(function (statementId) {
     // NOTE: These casts are safe because we always call this with `statements`
     // being the set of common statements between the two positions.
-    let a = /** @type {{value: ValgomatAlgoritme.PositionValue}} */ (positionsA[statementId])
-    let b = /** @type {{value: ValgomatAlgoritme.PositionValue}} */ (positionsB[statementId])
+    let a = /** @type {ValgomatAlgoritme.PositionValue} */ (positionsA[statementId])
+    let b = /** @type {ValgomatAlgoritme.PositionValue} */ (positionsB[statementId])
 
-    return [a.value, b.value]
+    return [a, b]
   })
 }
 

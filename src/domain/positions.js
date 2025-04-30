@@ -4,7 +4,7 @@
  */
 export function toVector(positions) {
   return Object.keys(positions).map(function (statementId) {
-    return [statementId, positions[statementId].value]
+    return [statementId, positions[statementId]]
   })
 }
 
@@ -13,10 +13,7 @@ export function toVector(positions) {
  * @returns {ValgomatAlgoritme.Positions}
  */
 export function toPositions(vector) {
-  return vector.reduce((positions, [id, value]) => {
-    positions[id] = { value }
-    return positions
-  }, /** @type {ValgomatAlgoritme.Positions} */ ({}))
+  return Object.fromEntries(vector)
 }
 
 /**
