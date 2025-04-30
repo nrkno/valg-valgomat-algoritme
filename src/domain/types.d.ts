@@ -1,7 +1,7 @@
 export type PositionValue = -2 | -1 | 1 | 2
 
 export type Positions = {
-  [key: string]: { value: PositionValue | null }
+  [key: string]: PositionValue | null
 }
 
 export type PositionsMap<T extends string> = Record<T, Positions>

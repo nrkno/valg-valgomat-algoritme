@@ -12,13 +12,13 @@ The simple case is comparing to sets of positions.
 import { proximity } from '@nrk/valg-valgomat-algoritme'
 
 let partyPositions = {
-  1: { value: 1 },
-  2: { value: -1 },
+  id1: 1,
+  id2: -1
 }
 
 let voterPositions = {
-  1: { value: -2 },
-  2: { value: 2 },
+  id1: -2,
+  id2: 2
 }
 
 let p = proximity(partyPositions, voterPositions)
@@ -31,23 +31,23 @@ The module also comes with a function to compare many positions to one position.
 import { proximityMap } from '@nrk/valg-valgomat-algoritme'
 
 let partyAPositions = {
-  1: { value: 1 },
-  2: { value: -1 },
+  id1: 1,
+  id2: -1
 }
 
 let partyBPositions = {
-  1: { value: 2 },
-  2: { value: -2 },
+  id1: 2,
+  id2: -2
 }
 
 let partyPostitions = {
   partyA: partyAPositions,
-  partyB: partyBPositions,
+  partyB: partyBPositions
 }
 
 let voterPositions = {
-  1: { value: null },
-  2: { value: -2 },
+  id1: null,
+  id2: -2
 }
 
 let proximities = proximityMap(voterPositions, partyPositions)
@@ -68,11 +68,9 @@ Positions are given in the form of sets:
 
 ```ts
 {
-  [statement: string]: { value: -2 | -1 | 1 | -2 | null }
+  [statement: string]: -2 | -1 | 1 | -2 | null
 }
 ```
-
-Where `value` is in the interval `[-2.0, 2.0]`
 
 Output will be a number in the interval `[0.0, 1.0]` where `0.0` is the furthest away and `1.0` is the closest possible proximity (iow. identical).
 
