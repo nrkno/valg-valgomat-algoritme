@@ -68,7 +68,7 @@ Positions are given in the form of sets:
 
 ```ts
 {
-  [statement: string]: -2 | -1 | 1 | -2 | null
+  [statement: string]: -2 | -1 | 1 | 2 | null
 }
 ```
 
